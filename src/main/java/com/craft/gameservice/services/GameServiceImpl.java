@@ -49,15 +49,18 @@ public class GameServiceImpl implements GameService<playerScore> {
 					}
 				}
 			}
+			logger.info("Initialized leaderboard with topN: " + topN);
+			logger.info("Scores in dataset: " + dataSet);
 		} catch (Exception e) {
 			logger.error("Failed to initialize - " + e.getMessage());
 			throw new InitializationException("Failed to initialize");
 		}
 	}
 
-	public List<playerScore> getTopNplayers() {
+	public List<playerScore> getTopPlayers() {
 		List<playerScore> res = new ArrayList<playerScore>(minHeap);
 		Collections.sort(res, Collections.reverseOrder());
+		logger.info("Top players: " + res);
 		return res;
 	}
 

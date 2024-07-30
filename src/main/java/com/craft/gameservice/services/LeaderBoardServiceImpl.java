@@ -45,7 +45,7 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 			logger.error("Leader Board Not Initialized - Cannot retrieve top players");
 			throw new LeaderboardNotInitializedException("LeaderBoard not yet initialized");
 		}
-		return service.getTopNplayers();
+		return service.getTopPlayers();
 	}
 
 }
