@@ -48,4 +48,15 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 		return service.getTopPlayers();
 	}
 
+	public playerScore updatePlayerScore(playerScore updatedScore) {
+		playerScore existingScore = scoreRepository.findById(updatedScore.getPlayerId())
+				.orElseThrow(() -> new IllegalArgumentException("Player not found"));
+		existingScore.setScore(updatedScore.getScore());
+		scoreRepository.save(existingScore);
+		if (leaderBoardInitialized) {
+			service.updatePlayer(existingScore);
+		}
+		return existingScore;
+	}
+
 }

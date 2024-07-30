@@ -9,5 +9,7 @@ import com.craft.gameservice.exceptions.LeaderboardNotInitializedException;
 public interface LeaderBoardService {
 	public void createBoard(int topN) throws InitializationException, LeaderboardNotInitializedException;
 	public List<playerScore> getTopPlayers() throws LeaderboardNotInitializedException;
+	playerScore updatePlayerScore(playerScore updatedScore) throws LeaderboardNotInitializedException;
+
 
 }

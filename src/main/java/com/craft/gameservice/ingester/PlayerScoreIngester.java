@@ -26,7 +26,7 @@ public class PlayerScoreIngester implements Ingester<playerScore> {
     Logger logger = LoggerFactory.getLogger(PlayerScoreIngester.class);
 
     @Override
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 600000)
     public void ingest() {
         try (FileReader reader = new FileReader(Constants.CSV_FILE_PATH)) {
             List<playerScore> scores = new CsvToBeanBuilder<playerScore>(reader)

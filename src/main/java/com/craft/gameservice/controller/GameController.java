@@ -43,6 +43,19 @@ public class GameController {
 		}
 	}
 
+	@PutMapping("/updatePlayerScore")
+	public playerScore updatePlayerScore(@RequestBody playerScore updatedScore) {
+		try {
+			return leaderBoard.updatePlayerScore(updatedScore);
+		} catch (IllegalArgumentException e) {
+			logger.error("Player not found - " + e.getMessage());
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+		} catch (Exception e) {
+			logger.error("Couldn't update player score - " + e.getMessage());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating player score");
+		}
+	}
+
 
 	@ExceptionHandler(ResponseStatusException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

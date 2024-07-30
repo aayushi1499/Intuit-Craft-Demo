@@ -49,7 +49,6 @@ public class GameServiceImpl implements GameService<playerScore> {
 					}
 				}
 			}
-			logger.info("Initialized leaderboard with topN: " + topN);
 			logger.info("Scores in dataset: " + dataSet);
 		} catch (Exception e) {
 			logger.error("Failed to initialize - " + e.getMessage());
@@ -62,6 +61,32 @@ public class GameServiceImpl implements GameService<playerScore> {
 		Collections.sort(res, Collections.reverseOrder());
 		logger.info("Top players: " + res);
 		return res;
+	}
+
+	@Override
+	public void updatePlayer(playerScore player) {
+		if (!playerToScore.containsKey(player.getPlayerId())) {
+			addPlayer(player);
+		} else {
+			playerScore existingScore = playerToScore.get(player.getPlayerId());
+			minHeap.remove(existingScore);
+			playerToScore.put(player.getPlayerId(), player);
+			addPlayer(player);
+		}
+	}
+
+	private void addPlayer(playerScore player) {
+		if (minHeap.size() < topN) {
+			minHeap.add(player);
+			playerToScore.put(player.getPlayerId(), player);
+		} else {
+			if (player.getScore() > minHeap.peek().getScore()) {
+				playerScore removedScore = minHeap.poll();
+				minHeap.add(player);
+				playerToScore.remove(removedScore.getPlayerId());
+				playerToScore.put(player.getPlayerId(), player);
+			}
+		}
 	}
 
 }

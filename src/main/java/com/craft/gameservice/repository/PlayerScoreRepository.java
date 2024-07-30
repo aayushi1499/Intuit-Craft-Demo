@@ -42,6 +42,16 @@ public class PlayerScoreRepository {
 
     public void save(playerScore newScore) {
         redisTemplate.opsForValue().set(newScore.getPlayerId(), newScore.getScore());
+    }
 
+    public Optional<playerScore> findById(String playerId) {
+        Object score = redisTemplate.opsForValue().get(playerId);
+        if (score instanceof Long) {
+            return Optional.of(new playerScore(playerId, (Long) score));
+        } else if (score instanceof Integer) {
+            return Optional.of(new playerScore(playerId, ((Integer) score).longValue()));
+        } else {
+            return Optional.empty();
+        }
     }
 }
