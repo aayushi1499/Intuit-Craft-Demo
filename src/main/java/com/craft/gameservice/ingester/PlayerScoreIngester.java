@@ -1,7 +1,7 @@
 package com.craft.gameservice.ingester;
 
 import com.craft.gameservice.constants.Constants;
-import com.craft.gameservice.entity.playerScore;
+import com.craft.gameservice.entity.PlayerScore;
 import com.craft.gameservice.exceptions.DatabaseStorageException;
 import com.craft.gameservice.repository.PlayerScoreRepository;
 import com.craft.gameservice.services.LeaderBoardService;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PlayerScoreIngester implements Ingester<playerScore> {
+public class PlayerScoreIngester implements Ingester<PlayerScore> {
     List<LeaderBoardService> leaderBoards = new ArrayList<LeaderBoardService>();
 
     @Autowired
@@ -29,12 +29,12 @@ public class PlayerScoreIngester implements Ingester<playerScore> {
     @Scheduled(fixedRate = 600000)
     public void ingest() {
         try (FileReader reader = new FileReader(Constants.CSV_FILE_PATH)) {
-            List<playerScore> scores = new CsvToBeanBuilder<playerScore>(reader)
-                    .withType(playerScore.class)
+            List<PlayerScore> scores = new CsvToBeanBuilder<PlayerScore>(reader)
+                    .withType(PlayerScore.class)
                     .build()
                     .parse();
 
-            for (playerScore score : scores) {
+            for (PlayerScore score : scores) {
                 publishToRedis(score);
                 logger.debug("Published " + score);
             }
@@ -45,7 +45,7 @@ public class PlayerScoreIngester implements Ingester<playerScore> {
         }
     }
 
-    public void publishToRedis(playerScore newScore) throws DatabaseStorageException {
+    public void publishToRedis(PlayerScore newScore) throws DatabaseStorageException {
         try {
             scoreRepository.save(newScore);
         } catch (Exception e) {

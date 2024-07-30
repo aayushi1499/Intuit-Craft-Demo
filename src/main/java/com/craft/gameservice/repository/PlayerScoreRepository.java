@@ -1,6 +1,6 @@
 package com.craft.gameservice.repository;
 
-import com.craft.gameservice.entity.playerScore;
+import com.craft.gameservice.entity.PlayerScore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,19 +16,15 @@ public class PlayerScoreRepository {
     @Autowired
     RedisTemplate<String, Object> redisTemplate;
 
-    public List<playerScore> findAll() {
-        List<playerScore> playerScores = new ArrayList<>();
-        // Scan options with a pattern if needed
+    public List<PlayerScore> findAll() {
+        List<PlayerScore> playerScores = new ArrayList<>();
         try {
             ScanOptions scanOptions = ScanOptions.scanOptions().build();
             Cursor<byte[]> cursor = redisTemplate.getConnectionFactory().getConnection().scan(scanOptions);
             while (cursor.hasNext()) {
-                // Convert the key to a string
                 String keyStr = new String(cursor.next());
-                // Fetch value for the key
                 Long value = new Long((int) redisTemplate.opsForValue().get(keyStr));
-                // Create playerScore and add to list
-                playerScore newPlayerScore = new playerScore(keyStr, value);
+                PlayerScore newPlayerScore = new PlayerScore(keyStr, value);
                 playerScores.add(newPlayerScore);
             }
         } finally {}
@@ -40,16 +36,16 @@ public class PlayerScoreRepository {
         redisTemplate.getConnectionFactory().getConnection().flushAll();
     }
 
-    public void save(playerScore newScore) {
+    public void save(PlayerScore newScore) {
         redisTemplate.opsForValue().set(newScore.getPlayerId(), newScore.getScore());
     }
 
-    public Optional<playerScore> findById(String playerId) {
+    public Optional<PlayerScore> findById(String playerId) {
         Object score = redisTemplate.opsForValue().get(playerId);
         if (score instanceof Long) {
-            return Optional.of(new playerScore(playerId, (Long) score));
+            return Optional.of(new PlayerScore(playerId, (Long) score));
         } else if (score instanceof Integer) {
-            return Optional.of(new playerScore(playerId, ((Integer) score).longValue()));
+            return Optional.of(new PlayerScore(playerId, ((Integer) score).longValue()));
         } else {
             return Optional.empty();
         }

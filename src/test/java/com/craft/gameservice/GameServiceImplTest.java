@@ -1,6 +1,6 @@
 package com.craft.gameservice;
 
-import com.craft.gameservice.entity.playerScore;
+import com.craft.gameservice.entity.PlayerScore;
 import com.craft.gameservice.exceptions.InitializationException;
 import com.craft.gameservice.services.GameServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,10 +23,10 @@ public class GameServiceImplTest {
 
 	@Test
 	public void testInitialize() throws InitializationException {
-		List<playerScore> dataSet = Arrays.asList(
-				new playerScore("player1", 500),
-				new playerScore("player2", 400),
-				new playerScore("player3", 300)
+		List<PlayerScore> dataSet = Arrays.asList(
+				new PlayerScore("player1", 500),
+				new PlayerScore("player2", 400),
+				new PlayerScore("player3", 300)
 		);
 
 		assertThrows(InitializationException.class, () -> {
@@ -38,14 +38,14 @@ public class GameServiceImplTest {
 
 	@Test
 	public void testGetTopNplayers() throws InitializationException {
-		List<playerScore> dataSet = Arrays.asList(
-				new playerScore("player1", 500),
-				new playerScore("player2", 400),
-				new playerScore("player3", 300)
+		List<PlayerScore> dataSet = Arrays.asList(
+				new PlayerScore("player1", 500),
+				new PlayerScore("player2", 400),
+				new PlayerScore("player3", 300)
 		);
 
 		gameService.initialize(3, dataSet);
-		List<playerScore> topPlayers = gameService.getTopPlayers();
+		List<PlayerScore> topPlayers = gameService.getTopPlayers();
 		assertEquals(3, topPlayers.size());
 		assertEquals("player1", topPlayers.get(0).getPlayerId());
 		assertEquals("player2", topPlayers.get(1).getPlayerId());
@@ -54,17 +54,17 @@ public class GameServiceImplTest {
 
 	@Test
 	public void testUpdatePlayerScore() throws InitializationException {
-		List<playerScore> dataSet = Arrays.asList(
-				new playerScore("player1", 500),
-				new playerScore("player2", 400),
-				new playerScore("player3", 300)
+		List<PlayerScore> dataSet = Arrays.asList(
+				new PlayerScore("player1", 500),
+				new PlayerScore("player2", 400),
+				new PlayerScore("player3", 300)
 		);
 
 		gameService.initialize(3, dataSet);
 
 		// Update player2's score to 600
-		gameService.updatePlayer(new playerScore("player2", 600));
-		List<playerScore> topPlayers = gameService.getTopPlayers();
+		gameService.updatePlayer(new PlayerScore("player2", 600));
+		List<PlayerScore> topPlayers = gameService.getTopPlayers();
 		assertEquals(3, topPlayers.size());
 		assertEquals("player2", topPlayers.get(0).getPlayerId());
 		assertEquals(600, topPlayers.get(0).getScore());
@@ -72,7 +72,7 @@ public class GameServiceImplTest {
 		assertEquals("player3", topPlayers.get(2).getPlayerId());
 
 		// Update player4's score to 700 (new player)
-		gameService.updatePlayer(new playerScore("player4", 700));
+		gameService.updatePlayer(new PlayerScore("player4", 700));
 		topPlayers = gameService.getTopPlayers();
 		assertEquals(3, topPlayers.size());
 		assertEquals("player4", topPlayers.get(0).getPlayerId());

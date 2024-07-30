@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.craft.gameservice.entity.playerScore;
+import com.craft.gameservice.entity.PlayerScore;
 import com.craft.gameservice.exceptions.InitializationException;
 import com.craft.gameservice.exceptions.LeaderboardNotInitializedException;
 import com.craft.gameservice.repository.PlayerScoreRepository;
@@ -17,7 +17,7 @@ import com.craft.gameservice.ingester.PlayerScoreIngester;
 public class LeaderBoardServiceImpl implements LeaderBoardService {
 
 	@Autowired
-    GameService<playerScore> service;
+    GameService<PlayerScore> service;
 
 	@Autowired
 	PlayerScoreRepository scoreRepository;
@@ -30,7 +30,7 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 	Logger logger = LoggerFactory.getLogger(LeaderBoardServiceImpl.class);
 	public void createBoard(int topN) throws LeaderboardNotInitializedException {
 		try {
-			List<playerScore> allScores = scoreRepository.findAll();
+			List<PlayerScore> allScores = scoreRepository.findAll();
 			service.initialize(topN, allScores);
 			playerScoreIngester.createLeaderBoard(this);
 			leaderBoardInitialized = true;
@@ -40,7 +40,7 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 		}
 	}
 
-	public List<playerScore> getTopPlayers() throws LeaderboardNotInitializedException {
+	public List<PlayerScore> getTopPlayers() throws LeaderboardNotInitializedException {
 		if (!leaderBoardInitialized) {
 			logger.error("Leader Board Not Initialized - Cannot retrieve top players");
 			throw new LeaderboardNotInitializedException("LeaderBoard not yet initialized");
@@ -48,8 +48,8 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 		return service.getTopPlayers();
 	}
 
-	public playerScore updatePlayerScore(playerScore updatedScore) {
-		playerScore existingScore = scoreRepository.findById(updatedScore.getPlayerId())
+	public PlayerScore updatePlayerScore(PlayerScore updatedScore) {
+		PlayerScore existingScore = scoreRepository.findById(updatedScore.getPlayerId())
 				.orElseThrow(() -> new IllegalArgumentException("Player not found"));
 		existingScore.setScore(updatedScore.getScore());
 		scoreRepository.save(existingScore);

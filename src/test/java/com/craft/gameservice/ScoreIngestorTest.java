@@ -3,7 +3,7 @@ package com.craft.gameservice;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import com.craft.gameservice.entity.playerScore;
+import com.craft.gameservice.entity.PlayerScore;
 import com.craft.gameservice.exceptions.DatabaseStorageException;
 import com.craft.gameservice.ingester.PlayerScoreIngester;
 import com.craft.gameservice.services.LeaderBoardService;
@@ -41,13 +41,13 @@ public class ScoreIngestorTest {
 			scoreRepository.deleteAll();
 
 			// Insert test data into the repository
-			List<playerScore> testScores = Arrays.asList(
-					new playerScore("Aayushi", 100),
-					new playerScore("Priyanka", 200),
-					new playerScore("Ravi", 300)
+			List<PlayerScore> testScores = Arrays.asList(
+					new PlayerScore("Aayushi", 100),
+					new PlayerScore("Priyanka", 200),
+					new PlayerScore("Ravi", 300)
 			);
 
-			for (playerScore score : testScores) {
+			for (PlayerScore score : testScores) {
 				scoreRepository.save(score);
 			}
 
@@ -55,9 +55,9 @@ public class ScoreIngestorTest {
 			leaderBoard.createBoard(3);
 
 			// Publish scores to Redis
-			playerScoreIngester.publishToRedis(new playerScore("Aayushi", 100));
-			playerScoreIngester.publishToRedis(new playerScore("Priyanka", 200));
-			playerScoreIngester.publishToRedis(new playerScore("Ravi", 300));
+			playerScoreIngester.publishToRedis(new PlayerScore("Aayushi", 100));
+			playerScoreIngester.publishToRedis(new PlayerScore("Priyanka", 200));
+			playerScoreIngester.publishToRedis(new PlayerScore("Ravi", 300));
 
 			// Allow some time for Redis to process the scores
 			Thread.sleep(2000); // Adjust this as needed for your environment
@@ -67,23 +67,23 @@ public class ScoreIngestorTest {
 
 			// Print scores for debugging
 			System.out.println("Published Scores to Redis:");
-			for (playerScore p : testScores) {
+			for (PlayerScore p : testScores) {
 				System.out.println(p);
 			}
 
-			List<playerScore> actualScores = leaderBoard.getTopPlayers();
+			List<PlayerScore> actualScores = leaderBoard.getTopPlayers();
 
 			// Print actual scores for debugging
 			System.out.println("Actual Scores from LeaderBoard:");
-			for (playerScore p : actualScores) {
+			for (PlayerScore p : actualScores) {
 				System.out.println(p);
 			}
 
 			// Define expected output
-			List<playerScore> expectedScores = Arrays.asList(
-					new playerScore("Ravi", 300),
-					new playerScore("Priyanka", 200),
-					new playerScore("Aayushi", 100)
+			List<PlayerScore> expectedScores = Arrays.asList(
+					new PlayerScore("Ravi", 300),
+					new PlayerScore("Priyanka", 200),
+					new PlayerScore("Aayushi", 100)
 			);
 
 			// Verify top players

@@ -1,14 +1,14 @@
 package com.craft.gameservice.entity;
 
-public class playerScore implements Comparable<playerScore> {
+public class PlayerScore implements Comparable<PlayerScore> {
 
 	String playerId;
 	Long score;
 	
-	public playerScore() {
+	public PlayerScore() {
 	}
 
-	public playerScore(String playerId, long score) {
+	public PlayerScore(String playerId, long score) {
 		this.playerId = playerId;
 		this.score = score;
 	}
@@ -27,7 +27,7 @@ public class playerScore implements Comparable<playerScore> {
 		this.score = score;
 	}
 
-	public int compareTo(playerScore p) {
+	public int compareTo(PlayerScore p) {
 		if (this.score == p.getScore()) {
 			return this.playerId.compareTo(p.getPlayerId());
 		}
@@ -41,7 +41,7 @@ public class playerScore implements Comparable<playerScore> {
 	
 	@Override
 	public boolean equals(Object o) {
-		return this.playerId.equals(((playerScore)o).getPlayerId())
-				&& this.score == ((playerScore)o).getScore();
+		return this.playerId.equals(((PlayerScore)o).getPlayerId())
+				&& this.score == ((PlayerScore)o).getScore();
 	}
 }

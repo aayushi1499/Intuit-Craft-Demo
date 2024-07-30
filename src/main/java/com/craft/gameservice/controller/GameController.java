@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.craft.gameservice.entity.playerScore;
+import com.craft.gameservice.entity.PlayerScore;
 import com.craft.gameservice.exceptions.LeaderboardNotInitializedException;
 import com.craft.gameservice.services.LeaderBoardService;
 
@@ -22,7 +22,7 @@ public class GameController {
 	Logger logger = LoggerFactory.getLogger(GameController.class);
 
 	@GetMapping("/getTopScorers/{N}")
-	public List<playerScore> getTopScorers(@PathVariable String N) {
+	public List<PlayerScore> getTopScorers(@PathVariable String N) {
 		int n;
 		try {
 			n = Integer.parseInt(N);
@@ -44,7 +44,7 @@ public class GameController {
 	}
 
 	@PutMapping("/updatePlayerScore")
-	public playerScore updatePlayerScore(@RequestBody playerScore updatedScore) {
+	public PlayerScore updatePlayerScore(@RequestBody PlayerScore updatedScore) {
 		try {
 			return leaderBoard.updatePlayerScore(updatedScore);
 		} catch (IllegalArgumentException e) {
