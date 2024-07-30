@@ -32,7 +32,6 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 		try {
 			List<PlayerScore> allScores = scoreRepository.findAll();
 			service.initialize(topN, allScores);
-			playerScoreIngester.createLeaderBoard(this);
 			leaderBoardInitialized = true;
 		} catch (InitializationException e) {
 			logger.error("Leader Board Initialization Failed - " + e.getMessage());
@@ -50,7 +49,7 @@ public class LeaderBoardServiceImpl implements LeaderBoardService {
 
 	public PlayerScore updatePlayerScore(PlayerScore updatedScore) {
 		PlayerScore existingScore = scoreRepository.findById(updatedScore.getPlayerId())
-				.orElseThrow(() -> new IllegalArgumentException("Player not found"));
+				.orElseThrow(() -> new IllegalArgumentException("Player with id " + updatedScore.getPlayerId() + " not found"));
 		existingScore.setScore(updatedScore.getScore());
 		scoreRepository.save(existingScore);
 		if (leaderBoardInitialized) {

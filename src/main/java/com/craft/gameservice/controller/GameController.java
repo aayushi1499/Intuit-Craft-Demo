@@ -1,6 +1,7 @@
 package com.craft.gameservice.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,15 +48,17 @@ public class GameController {
 	public PlayerScore updatePlayerScore(@RequestBody PlayerScore updatedScore) {
 		try {
 			return leaderBoard.updatePlayerScore(updatedScore);
-		} catch (IllegalArgumentException e) {
+		} catch (NoSuchElementException e) {
 			logger.error("Player not found - " + e.getMessage());
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player not found");
+		} catch (IllegalArgumentException e) {
+			logger.error(e.getMessage());
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
 		} catch (Exception e) {
 			logger.error("Couldn't update player score - " + e.getMessage());
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error updating player score");
 		}
 	}
-
 
 	@ExceptionHandler(ResponseStatusException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)

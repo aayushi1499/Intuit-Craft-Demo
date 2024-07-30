@@ -2,8 +2,8 @@ package com.craft.gameservice.entity;
 
 public class PlayerScore implements Comparable<PlayerScore> {
 
-	String playerId;
-	Long score;
+	private String playerId;
+	private Long score;
 	
 	public PlayerScore() {
 	}

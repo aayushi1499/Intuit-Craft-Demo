@@ -52,11 +52,6 @@ public class PlayerScoreIngester implements Ingester<PlayerScore> {
             logger.error("message " + e.getMessage());
             throw new DatabaseStorageException("Could not publish data to storage");
         }
-
-    }
-
-    public void createLeaderBoard(LeaderBoardService leaderBoard) {
-        leaderBoards.add(leaderBoard);
     }
 
 }

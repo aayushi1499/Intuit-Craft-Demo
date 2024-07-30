@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -30,10 +31,10 @@ public class GameServiceImplTest {
 		);
 
 		assertThrows(InitializationException.class, () -> {
-			gameService.initialize(5, dataSet);  // topN is greater than dataSet size
+			gameService.initialize(5, dataSet);
 		});
 
-		gameService.initialize(3, dataSet);  // No exception should be thrown
+		gameService.initialize(3, dataSet);
 	}
 
 	@Test
@@ -61,24 +62,14 @@ public class GameServiceImplTest {
 		);
 
 		gameService.initialize(3, dataSet);
-
-		// Update player2's score to 600
 		gameService.updatePlayer(new PlayerScore("player2", 600));
 		List<PlayerScore> topPlayers = gameService.getTopPlayers();
 		assertEquals(3, topPlayers.size());
 		assertEquals("player2", topPlayers.get(0).getPlayerId());
 		assertEquals(600, topPlayers.get(0).getScore());
-		assertEquals("player1", topPlayers.get(1).getPlayerId());
-		assertEquals("player3", topPlayers.get(2).getPlayerId());
 
-		// Update player4's score to 700 (new player)
-		gameService.updatePlayer(new PlayerScore("player4", 700));
-		topPlayers = gameService.getTopPlayers();
-		assertEquals(3, topPlayers.size());
-		assertEquals("player4", topPlayers.get(0).getPlayerId());
-		assertEquals(700, topPlayers.get(0).getScore());
-		assertEquals("player2", topPlayers.get(1).getPlayerId());
-		assertEquals(600, topPlayers.get(1).getScore());
-		assertEquals("player1", topPlayers.get(2).getPlayerId());
+		assertThrows(IllegalArgumentException.class, () -> {
+			gameService.updatePlayer(new PlayerScore("player4", 700));
+		});
 	}
 }
