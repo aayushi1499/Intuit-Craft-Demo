@@ -19,7 +19,6 @@ import java.util.List;
 
 @Service
 public class PlayerScoreIngester implements Ingester<PlayerScore> {
-    List<LeaderBoardService> leaderBoards = new ArrayList<LeaderBoardService>();
 
     @Autowired
     PlayerScoreRepository scoreRepository;
